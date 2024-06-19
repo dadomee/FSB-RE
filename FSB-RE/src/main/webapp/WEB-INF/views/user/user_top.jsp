@@ -6,10 +6,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <!-- css 파일 연결하기 -->
-   <script src="resources/js/jquery-3.7.0.js">
-   </script>
-   
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link href="resources/css/bootstrap.min.css" rel="stylesheet">
 	<link href="resources/css/bootstrap.min.css" rel="stylesheet">
@@ -173,7 +169,6 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="game_list.do">보드게임</a>
         </li>
-        
         <li class="nav-item dropdown">
         <a class="nav-link nav-profile d-flex align-items-center pe-0 show" href="#" data-bs-toggle="dropdown" aria-expanded="false">
             <span class="d-none d-md-block dropdown-toggle ps-2">커뮤니티</span>
@@ -215,7 +210,6 @@
    	<li class="nav-item">
           <a class="nav-link" href="shop_main.do">쇼핑몰</a>
    </li>
-   
   <c:if test="${login_mem != null}">
    <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">마이페이지</a>
