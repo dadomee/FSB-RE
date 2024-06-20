@@ -4,6 +4,36 @@
 <%@include file="../user/user_top.jsp" %>
 <!-- list.jsp -->
 <html> 
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <!-- Vendor JS Files -->
+  <script src="resources/NiceAdmin/assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/echarts/echarts.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/quill/quill.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="resources/NiceAdmin/assets/js/main.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="resources/NiceAdmin/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="resources/NiceAdmin/assets/css/style.css" rel="stylesheet">
 <style>
 .box {
     width: 50px;
@@ -37,27 +67,25 @@
 	<title>중고게시판</title>
 </head>	
 <body>
-<body>
-	<main class="d-flex flex-nowrap" style="width: 100%;">
-	<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white " style="width:100px; min-width: 20rem; min-height: 500px;">
-	<div class="card border-warning mb-3 p-3 position-absolute top-50 start-0 translate-middle-y " style="max-width: 12rem;  margin: 100px 100px;">
-  	  <ul class="list-group list-group-flush">
-    <li class="list-group-item"><a href="board_free.do?mode=" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">자유게시판</a></li>
-    <li class="list-group-item"><a href="board_secondhand.do?mode=all" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">중고게시판</a></li>
-    <li class="list-group-item"><a href="board_anony.do?mode=anony" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">익명게시판</a></li>
-  </ul>
-	</div>
-</div>
-	<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width:900px; min-width: 30rem;">
-<div align="center">
-	<b>중 고 게 시 판</b></div>
-		<div class="container">
+ <div class="container-fluid">
+    <div class="pagetitle">
+    <br>
+      <h1>중고거래 게시판</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-10">
+          <div class="card h-100">
+          <div></div>
+            <div class="card-body">
+              <div class="container">
 		<div class="row">
-  	  <div class="col-2">
+  	  <div class="col-4">
   	  </div>
-  	<div class="col-8">
-		<div class="input-group mb-3 p-2">
-		 <form class="d-flex" role="search" action="board_sh_find.do" method="post">
+  	<div class="col-6">
+		<div class="input-group mb-3">
+		 <form class="d-flex p-5" role="search" action="board_sh_find.do" method="post">
  			<select class="form-select" aria-label="Default select example"name="select">
   			<option value="title" selected>제목</option>
   			<option value="writer" >작성자</option>
@@ -214,6 +242,12 @@
 	</nav>
 	</div>
 	</div>
+	</div>
+	</div>
+	  <div class="col-lg-2">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">인기글</h5>
 	<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width:100px; min-width: 15rem;">
  	<div class="container">
   	<div class="row">
@@ -256,7 +290,11 @@
   </div>
 	</div>
 	</div>
-	</main>
+	</div>
+	</div>
+	</div>
+	</section>
+	</div>
 	</body>
 </html>
 <%@include file="../user/user_bottom.jsp" %>
