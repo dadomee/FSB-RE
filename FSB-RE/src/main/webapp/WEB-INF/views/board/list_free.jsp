@@ -87,7 +87,7 @@
   	  </div>
   	  <div class="col-6">
 		<div class="input-group mb-3">
-		 <form class="d-flex p-2" role="search" action="board_free_find.do" method="post">
+		 <form class="d-flex p-5" role="search" action="board_free_find.do" method="post">
  			<select class="form-select" aria-label="Default select example"name="select">
   			<option value="title" selected>제목</option>
   			<option value="writer" >작성자</option>
@@ -220,23 +220,23 @@
 	<!-- 게시글 페이지 수-->
 <nav aria-label="Page navigation example">
   <ul class="pagination justify-content-center">
-   <c:if test="${count>0}">
-   		<c:if test="${startPage > pageBlock}">
+   <c:if test="${page.count>0}">
+   		<c:if test="${page.startPage > p.pageBlock}">
    			 <li class="page-item">
-     		 <a class="page-link" href="board_free.do?mode=&pageNum=${startPage-pageBlock}" aria-label="Previous">
+     		 <a class="page-link" href="board_free.do?mode=&pageNum=${page.startPage-page.pageBlock}" aria-label="Previous">
        		 <span aria-hidden="true">&laquo;</span>
       		</a>
    			</li>
    		</c:if>
    		
-   		<c:forEach var="i" begin="${startPage}" end="${endPage}">
+   		<c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
    			 <li class="page-item">
    			  <a class="page-link" href="board_free.do?board_num=${listboard.board_num}&mode=&pageNum=${i}">${i}</a></li>
     	</c:forEach>
     
-   <c:if test="${endPage < pageCount}">
+   <c:if test="${page.endPage < page.pageCount}">
    			 <li class="page-item">
-      			<a class="page-link" href="board_free.do?mode=&pageNum=${startPage+pageBlock}" aria-label="Next">
+      			<a class="page-link" href="board_free.do?mode=&pageNum=${page.startPage+page.pageBlock}" aria-label="Next">
         			<span aria-hidden="true">&raquo;</span>
      			</a>
     		</li>

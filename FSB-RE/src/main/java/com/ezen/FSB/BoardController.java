@@ -58,14 +58,27 @@ public class BoardController {
 	@Resource(name = "uploadPath")
 	private String upPath;
 	
+	//로그인 체크
+	public ModelAndView loginCheck(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		HttpSession session= req.getSession();
+			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
+			if(mdto == null) {
+				session.invalidate();
+				mav.setViewName("message_back");
+				mav.addObject("msg","로그인 해주세요" );
+			}else {
+				mav.addObject("mem_num",mdto.getMem_num());
+			}
+			return mav;
+	}
 	//자유게시판 리스트 
 	@RequestMapping("/board_free.do")
 	public ModelAndView board_free_list(HttpServletRequest req, java.util.Map<String, Integer> params) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = req.getSession();
 		session.setAttribute("upPath", session.getServletContext().getRealPath("resources/images"));
-		
-		System.out.println(session.getServletContext().getRealPath("resources/images"));
+		//System.out.println(session.getServletContext().getRealPath("resources/images"));
 		//공지사항 리스트 
 		String mode = req.getParameter("mode");
 		List<NoticeDTO> nlist =boardMapper.nlistBoard(mode);
@@ -76,39 +89,17 @@ public class BoardController {
 		//댓글순
 		List<BoardDTO> replylist = boardMapper.replylist();
 		mav.addObject("replylist", replylist);
-			//페이지 넘버
-		int pageSize = 12;
 		
+		//페이지 넘버
 		String pageNum = req.getParameter("pageNum");
-		if (pageNum == null) {
-			pageNum = "1";
+		if(pageNum==null) {
+			pageNum="1";
 		}
-		int currentPage = Integer.parseInt(pageNum);
-		int startRow = (currentPage - 1) * pageSize + 1;
-		int endRow = startRow + pageSize - 1;
-		int count = boardMapper.getCountBoard();
-		params.put("start", startRow);
-		params.put("end", endRow);
-
-		if (endRow > count)
-			endRow = count;
-		List<BoardDTO> list = null;
-		if (count > 0) {
-			list = boardMapper.listBoard(params);
-			int pageCount = (count / pageSize) + (count % pageSize == 0 ? 0 : 1);
-			int pageBlock = 5;
-			int startPage = (currentPage - 1) / pageBlock * pageBlock + 1;
-			int endPage = startPage + pageBlock - 1;
-			if (endPage > pageCount)
-				endPage = pageCount;
-
-			mav.addObject("startPage", startPage);
-			mav.addObject("endPage", endPage);
-			mav.addObject("pageBlock", pageBlock);
-			mav.addObject("pageCount", pageCount);
-		}
+		params.put("pageNum", Integer.parseInt(pageNum));
+		params=boardMapper.listPagenation(params);
+		List<BoardDTO> list = boardMapper.listBoard(params);
 		
-		mav.addObject("count", count);
+		mav.addObject("page", params);
 		mav.addObject("nlistBoard", nlist);
 		mav.addObject("listBoard", list);
 		mav.setViewName("board/list_free");
@@ -132,41 +123,18 @@ public class BoardController {
 		//댓글순
 				List<BoardDTO> replylist = boardMapper.replylist_a();
 				mav.addObject("replylist", replylist);
-		//페이지 넘버
-		int pageSize = 10;
  
-		String pageNum = req.getParameter("pageNum");
-		if (pageNum == null) {
-			pageNum = "1";
-		}
-		int currentPage = Integer.parseInt(pageNum);
-		int startRow = (currentPage - 1) * pageSize + 1;
-		int endRow = startRow + pageSize - 1;
-		int count = boardMapper.getCountBoard_anony();
-		
-		params.put("start", startRow);
-		params.put("end", endRow);
-		params.put("mode", 1);
-		
-		if (endRow > count)
-			endRow = count;
-		List<BoardDTO> list = null;
-
-		if (count > 0) {
-			list =boardMapper.listBoard(params);
-			int pageCount = (count / pageSize) + (count % pageSize == 0 ? 0 : 1);
-			int pageBlock = 2;
-			int startPage = (currentPage - 1) / pageBlock * pageBlock + 1;
-			int endPage = startPage + pageBlock - 1;
-			if (endPage > pageCount)
-				endPage = pageCount;
-
-			mav.addObject("startPage", startPage);
-			mav.addObject("endPage", endPage);
-			mav.addObject("pageBlock", pageBlock);
-			mav.addObject("pageCount", pageCount);
-		}
-		mav.addObject("count", count);
+		//페이지 넘버
+				String pageNum = req.getParameter("pageNum");
+				if(pageNum==null) {
+					pageNum="1";
+				}
+				params.put("pageNum", Integer.parseInt(pageNum));
+				params.put("mode", 1);
+				params=boardMapper.listPagenation(params);
+				List<BoardDTO> list = boardMapper.listBoard(params);
+				
+		mav.addObject("page", params);
 		mav.addObject("listBoard", list);
 		mav.addObject("nlistBoard", nlist);
 		mav.setViewName("board/list_anony");
@@ -178,14 +146,8 @@ public class BoardController {
 		int num = 0, re_group = 0, re_step = 0, re_level = 0;
 		ModelAndView mav = new ModelAndView();
 		//로그인 체크 
-		HttpSession session= req.getSession();
-			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-			if(mdto == null) {
-				session.invalidate();
-				mav.setViewName("message_back");
-				mav.addObject("msg","로그인 해주세요" );
-				return mav;
-			}
+		loginCheck(req);
+		
 		String snum = req.getParameter("board_num");
 		
 		if (snum != null) {
@@ -196,7 +158,6 @@ public class BoardController {
 		}
 		
 		mav.addObject("board_num", num);
-		mav.addObject("mem_num", mdto.getMem_num());
 		mav.addObject("board_re_group", re_group);
 		mav.addObject("board_re_step", re_step);
 		mav.addObject("board_re_level", re_level);
@@ -215,15 +176,10 @@ public class BoardController {
 				dto.setBoard_img3("");
 				dto.setBoard_img4("");
 			}
+			HttpSession session=req.getSession();
 			//로그인 체크 
-			HttpSession session= req.getSession();
-				MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-				if(mdto == null) {
-					session.invalidate();
-					req.setAttribute("msg","로그인 해주세요" );
-					req.setAttribute("url","login.do" );
-					return "message";
-				}
+			loginCheck(req);
+			
 			if(mode.equals("anony")) {
 				dto.setBoard_anony_check(1);
 				req.setAttribute("board_anony_check",dto.getBoard_anony_check());
@@ -372,13 +328,8 @@ public class BoardController {
 		 
 		HttpSession session=req.getSession();
 		//로그인 체크 
-			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-			if(mdto == null) {
-				session.invalidate();
-				mav.setViewName("message_back");
-				mav.addObject("msg","로그인 해주세요" );
-				return mav;
-			}
+		loginCheck(req);
+		
 		String upPath1 = session.getServletContext().getRealPath("/resources/files");
 			session.setAttribute("upPath1", upPath1);
 			req.setAttribute("upPath1", upPath1);
@@ -436,13 +387,8 @@ public class BoardController {
 		HttpSession session = req.getSession();
 		ModelAndView mav = new ModelAndView("/board/content");
 		//로그인 체크 
-			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-			if(mdto == null) {
-				session.invalidate();
-				mav.setViewName("message_back");
-				mav.addObject("msg","로그인 해주세요" );
-				return mav;
-			}
+			loginCheck(req);
+			
 		String upPath = session.getServletContext().getRealPath("/resources/img");
 		BoardDTO dto = boardMapper.getBoard(board_num,"content");
 		mav.addObject("getBoard", dto);
@@ -578,14 +524,8 @@ public class BoardController {
 		public ModelAndView deleteReply(HttpServletRequest req, int board_num,int br_num, int pageNum) {
 			ModelAndView mav = new ModelAndView("message");
 			//로그인 체크 
-			HttpSession session= req.getSession();
-				MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-				if(mdto == null) {
-					session.invalidate();
-					mav.setViewName("message_back");
-					mav.addObject("msg","로그인 해주세요" );
-					return mav;
-				}
+			loginCheck(req);
+			
 			int res = boardMapper.deleteReply(br_num);
 			if (res > 0) {
 				mav.addObject("msg", "삭제 성공! ");
@@ -607,13 +547,8 @@ public class BoardController {
 		ModelAndView mav = new ModelAndView("message");
 		//로그인 체크 
 		HttpSession session= req.getSession();
-			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-			if(mdto == null) {
-				session.invalidate();
-				mav.setViewName("message_back");
-				mav.addObject("msg","로그인 해주세요" );
-				return mav;
-			}
+			loginCheck(req);
+			
 			int board_num = dto.getBoard_num();
 			int br_num = dto.getBr_num();
 			dto.setBoard_num(board_num);
@@ -670,14 +605,7 @@ public class BoardController {
 	public ModelAndView re_reply(HttpServletRequest req,int br_num,int pageNum,int board_num) {
 		ModelAndView mav = new ModelAndView("/board/Re_replyForm");
 		//로그인 체크 
-		HttpSession session= req.getSession();
-			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-			if(mdto == null) {
-				session.invalidate();
-				mav.setViewName("message_back");
-				mav.addObject("msg","로그인 해주세요" );
-				return mav;
-			}
+		loginCheck(req);
 		Board_replyDTO dto = boardMapper.getReply(br_num);
 		BoardDTO bdto = boardMapper.getBoard(board_num, "getAnony");
 		mav.addObject("dto",dto);
@@ -695,14 +623,7 @@ public class BoardController {
 	public ModelAndView updateReply(HttpServletRequest req,int br_num,int pageNum) {
 		ModelAndView mav = new ModelAndView("/board/updateReplyForm");
 		//로그인 체크 
-		HttpSession session= req.getSession();
-			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-			if(mdto == null) {
-				session.invalidate();
-				mav.setViewName("message_back");
-				mav.addObject("msg","로그인 해주세요" );
-				return mav;
-			}
+		loginCheck(req);
 		Board_replyDTO dto = boardMapper.getReply(br_num);
 		mav.addObject("dto",dto);
 		mav.addObject("br_num",br_num);
@@ -713,15 +634,8 @@ public class BoardController {
 	@RequestMapping(value="/update_replyOk.do")
 	public ModelAndView updateReplyPro(HttpServletRequest req, @RequestParam Map<Object, Object> params) {
 		ModelAndView mav = new ModelAndView();
-		//로그인 체크 
-		HttpSession session= req.getSession();
-			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-			if(mdto == null) {
-				session.invalidate();
-				mav.setViewName("message_back");
-				mav.addObject("msg","로그인 해주세요" );
-				return mav;
-			}
+		//로그인 체크
+		loginCheck(req);
 		String br_num = (String)params.get("br_num");
 		Board_replyDTO dto = boardMapper.getReply(Integer.parseInt(br_num));
 		//String pageNum = (String)params.get
@@ -739,13 +653,7 @@ public class BoardController {
 		ModelAndView mav = new ModelAndView("message");
 		//로그인 체크 
 		HttpSession session= req.getSession();
-			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-			if(mdto == null) {
-				session.invalidate();
-				mav.setViewName("message_back");
-				mav.addObject("msg","로그인 해주세요" );
-				return mav;
-			}
+				loginCheck(req);
 		int board_num = Integer.parseInt(params.get("board_num"));
 
 		String board_img1 = req.getParameter("board_img1");
@@ -811,16 +719,9 @@ public class BoardController {
 	public ModelAndView updateOkBoard(HttpServletRequest req,@RequestParam("filename") List<MultipartFile> multiFileList, @ModelAttribute BoardDTO dto, BindingResult result)
 			throws IllegalStateException, IOException {
 		ModelAndView mav = new ModelAndView("message");
-		//로그인 체크 
-		HttpSession session= req.getSession();
-			MemberDTO mdto = (MemberDTO)session.getAttribute("login_mem");
-			if(mdto == null) {
-				session.invalidate();
-				mav.setViewName("message");
-				mav.addObject("msg","로그인 해주세요" );
-				mav.addObject("url","login.do" );
-				return mav;
-			}
+		//로그인 체크
+			HttpSession session = req.getSession();
+			loginCheck(req);
 		int board_num = Integer.parseInt(req.getParameter("board_num"));
 		if (result.hasErrors()) {
 		}

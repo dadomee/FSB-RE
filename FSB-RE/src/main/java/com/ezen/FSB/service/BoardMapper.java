@@ -22,6 +22,43 @@ public class BoardMapper {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	//페이지 네이션
+	
+	public Map<String,Integer> listPagenation(Map<String,Integer> params){
+		int pageSize = 12;
+		int currentPage = params.get("pageNum");
+		int startRow = (currentPage - 1) * pageSize + 1;
+		int endRow = startRow + pageSize - 1;
+		int count;
+		if(params.get("mode")==null){
+			count = getCountBoard();
+		}else{
+			count =getCountBoard_anony();
+			}
+		
+		params.put("start", startRow);
+		params.put("end", endRow);
+		
+		if (endRow > count)
+			endRow = count;
+		
+		if (count > 0) {
+			int pageCount = (count / pageSize) + (count % pageSize == 0 ? 0 : 1);
+			int pageBlock = 2;
+			int startPage = (currentPage - 1) / pageBlock * pageBlock + 1;
+			int endPage = startPage + pageBlock - 1;
+			if (endPage > pageCount)
+				endPage = pageCount;
+
+			params.put("startPage", startPage);
+			params.put("endPage", endPage);
+			params.put("pageBlock", pageBlock);
+			params.put("pageCount", pageCount);
+			params.put("count",count);
+		}
+		return params;
+	}
+	
 	//공지사항 리스트 
 	public List<NoticeDTO> nlistBoard(String mode) {
 		List<NoticeDTO> list = null;
@@ -44,12 +81,12 @@ public class BoardMapper {
 	//자유, 익명게시판 리스트
 	public  List<BoardDTO> listBoard(java.util.Map<String,Integer> params){
 		List<BoardDTO> list;
-		
 		if(params.get("mode")==null) {	
 		list = sqlSession.selectList("listBoard", params);
 		}else{
 		list = sqlSession.selectList("listBoard_anony", params);
 			}
+		
 		return list;
 		}
 	
