@@ -24,18 +24,32 @@ public class BoardMapper {
 	
 	//페이지 네이션
 	
-	public Map<String,Integer> listPagenation(Map<String,Integer> params){
+	public Map<String, Object> listPagenation(Map<String,Object> params){
 		int pageSize = 12;
-		int currentPage = params.get("pageNum");
+		int currentPage = (Integer)params.get("pageNum");
 		int startRow = (currentPage - 1) * pageSize + 1;
 		int endRow = startRow + pageSize - 1;
 		int count;
-		if(params.get("mode")==null){
+		String mode = (String)params.get("mode");
+		//게시판 리스트 페이지 네이션
+		if(mode==null){
 			count = getCountBoard();
+		}else if(mode.equals("all")||mode.equals("sell")||mode.equals("change")||mode.equals("buy")){
+			count = getCountBoard_sh(mode);
 		}else{
 			count =getCountBoard_anony();
+		}
+		// 검색 시 페이지네이션
+		if(params.containsKey("page")) {
+			String page = (String)params.get("page");
+			if(page.equals("free")) {
+				count = getCountFind(params);
+			}else if(page.equals("sh")){
+				count = getCountFind_sh(params);
+			}else {
+				count = getCountFind_anony(params);
 			}
-		
+		}
 		params.put("start", startRow);
 		params.put("end", endRow);
 		
@@ -79,7 +93,7 @@ public class BoardMapper {
 
 
 	//자유, 익명게시판 리스트
-	public  List<BoardDTO> listBoard(java.util.Map<String,Integer> params){
+	public  List<BoardDTO> listBoard(java.util.Map<String,Object> params){
 		List<BoardDTO> list;
 		if(params.get("mode")==null) {	
 		list = sqlSession.selectList("listBoard", params);
@@ -133,12 +147,11 @@ public class BoardMapper {
 	//자유, 익명 게시글 작성
 	public  int insertBoard(BoardDTO dto) {
 		if(dto.getBoard_num()==0) { //겟보드넘이 0 이면 새글 
-			int getcount;
 			if(dto.getBoard_anony_check()==1) {
-				getcount = getCountBoard_anony();
+				 getCountBoard_anony();
 					dto.setBoard_anony_check(1);
-				}else {
-			getcount = getCountBoard();
+			}else {
+				getCountBoard();
 			}
 			if(dto.getBoard_num()!=0) {
 				int res = 1;

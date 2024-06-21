@@ -58,6 +58,17 @@ public class BoardController {
 	@Resource(name = "uploadPath")
 	private String upPath;
 	
+	/*
+	 * ============================== 
+	 *  2024.06.20.
+	 *  - 페이지 네이션 서비스로 옮겨 중복코드 제거
+	 *  - 매개변수 맵 제네릭 String, Object로 통일 수정
+	 *  - 로그인 체크하는 부분 공통 메소드로 올림 <-loginCheck();
+	 * 
+	 * ==============================
+	 */
+	
+	
 	//로그인 체크
 	public ModelAndView loginCheck(HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
@@ -74,7 +85,7 @@ public class BoardController {
 	}
 	//자유게시판 리스트 
 	@RequestMapping("/board_free.do")
-	public ModelAndView board_free_list(HttpServletRequest req, java.util.Map<String, Integer> params) {
+	public ModelAndView board_free_list(HttpServletRequest req, java.util.Map<String, Object> params) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = req.getSession();
 		session.setAttribute("upPath", session.getServletContext().getRealPath("resources/images"));
@@ -109,7 +120,7 @@ public class BoardController {
 
 	//익명게시판 리스트 
 	@RequestMapping("/board_anony.do")
-	public ModelAndView boardAnony(HttpServletRequest req, java.util.Map<String, Integer> params) {
+	public ModelAndView boardAnony(HttpServletRequest req, java.util.Map<String, Object> params) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = req.getSession();
 		session.setAttribute("upPath", session.getServletContext().getRealPath("resources/images"));
@@ -130,7 +141,7 @@ public class BoardController {
 					pageNum="1";
 				}
 				params.put("pageNum", Integer.parseInt(pageNum));
-				params.put("mode", 1);
+				params.put("mode", "1");
 				params=boardMapper.listPagenation(params);
 				List<BoardDTO> list = boardMapper.listBoard(params);
 				
@@ -638,7 +649,6 @@ public class BoardController {
 		loginCheck(req);
 		String br_num = (String)params.get("br_num");
 		Board_replyDTO dto = boardMapper.getReply(Integer.parseInt(br_num));
-		//String pageNum = (String)params.get
 		dto.setBr_content((String)params.get("br_content"));
 		boardMapper.updateReply(dto);
 		
@@ -898,46 +908,24 @@ public class BoardController {
 			}else {
 				select = "board_content";
 			}
-			String searchString =(String) params.get("searchString");
 			
+			String searchString =(String) params.get("searchString");
 			params.put("search", select);
 			params.put("searchString", searchString); 
+			params.put("page", "free"); 
+			
 			//검색시 페이지 넘버
-			int pageSize = 10;
 			String pageNum = (String) params.get("pageNum");
 			if (pageNum == null) {
 				pageNum = "1";
 			}
-			int currentPage = Integer.parseInt(pageNum);
-			int startRow = (currentPage - 1) * pageSize + 1;
-			int endRow = startRow + pageSize - 1;
-			int count = boardMapper.getCountFind(params);
-			
-			params.put("start", startRow);
-			params.put("end", endRow);
-
-			if (endRow > count)
-				endRow = count;
-			List<BoardDTO> list = null;
-			if (count > 0) {
-				list =  boardMapper.findFree(params);
-				int pageCount = (count / pageSize) + (count % pageSize == 0 ? 0 : 1);
-				int pageBlock = 2;
-				int startPage = (currentPage - 1) / pageBlock * pageBlock + 1;
-				int endPage = startPage + pageBlock - 1;
-				if (endPage > pageCount)
-					endPage = pageCount;
-
-				mav.addObject("startPage", startPage);
-				mav.addObject("endPage", endPage);
-				mav.addObject("pageBlock", pageBlock);
-				mav.addObject("pageCount", pageCount);
-			}
-			
-				mav.addObject("count", count);
-				mav.addObject("listBoard", list);
+			params.put("pageNum", Integer.parseInt(pageNum));
+			params = boardMapper.listPagenation(params);
+			List<BoardDTO> list =boardMapper.findFree(params);
+			mav.addObject("page", params);
+			mav.addObject("listBoard", list);
 		
-				return mav;
+			return mav;
 	}
 	
 	//익명게시판 검색
@@ -954,42 +942,18 @@ public class BoardController {
 		}
 		params.put("search", select);
 		params.put("searchString", searchString);
+		params.put("page", "anony"); 
 		
 		//검색시 페이지 넘버
-		int pageSize = 10;
 		String pageNum = (String) params.get("pageNum");
 		if (pageNum == null) {
 			pageNum = "1";
 		}
-		int currentPage = Integer.parseInt(pageNum);
-		int startRow = (currentPage - 1) * pageSize + 1;
-		int endRow = startRow + pageSize - 1;
-		int count = boardMapper.getCountFind_anony(params);
-		
-		params.put("start", startRow);
-		params.put("end", endRow);
-
-		if (endRow > count)
-			endRow = count;
-		List<BoardDTO> list = null;
-		if (count > 0) {
-			list = boardMapper.findAnony(params);
-			int pageCount = (count / pageSize) + (count % pageSize == 0 ? 0 : 1);
-			int pageBlock = 2;
-			int startPage = (currentPage - 1) / pageBlock * pageBlock + 1;
-			int endPage = startPage + pageBlock - 1;
-			if (endPage > pageCount)
-				endPage = pageCount;
-
-			mav.addObject("startPage", startPage);
-			mav.addObject("endPage", endPage);
-			mav.addObject("pageBlock", pageBlock);
-			mav.addObject("pageCount", pageCount);
-		}
-		
-			mav.addObject("count", count);
+		params.put("pageNum", Integer.parseInt(pageNum));
+		params = boardMapper.listPagenation(params);
+		List<BoardDTO> list= boardMapper.findAnony(params);
+			mav.addObject("page",params);
 			mav.addObject("listBoard", list);
-		
 		return mav;
 	}
 }

@@ -96,12 +96,12 @@
 		</form>
 	</div>
 	</div>
-	<div class="col-2">	
-		<!-- 로그인 했을때만 글쓰기 버튼 노출 -->
+	<!-- 로그인 했을때만 글쓰기 버튼 노출 -->
 		<c:if test="${not empty sessionScope.mbId}">
-			<td align="right"><a href="write_board_sh.do?mode=${params.mode}"><button type="button" class="btn btn-outline-warning">글쓰기</button></a></td>
-			</c:if>
+		<div class="col-2 align-self-center">
+		<a href="write_board_sh.do?mode=${params.mode}"><button type="button" class="btn btn-outline-warning">글쓰기</button></a>
 	</div>
+		</c:if>
 	</div>
 	</div>
 		<div class="container text-center">
@@ -216,23 +216,23 @@
 	
 <nav aria-label="Page navigation example">
   <ul class="pagination justify-content-center">
-   <c:if test="${count>0}">
-   		<c:if test="${startPage > pageBlock}">
+   <c:if test="${page.count>0}">
+   		<c:if test="${page.startPage > page.pageBlock}">
    			 <li class="page-item">
-     		 <a class="page-link" href="board_secondhand.do?mode=all&pageNum=${startPage-pageBlock}" aria-label="Previous">
+     		 <a class="page-link" href="board_secondhand.do?mode=all&pageNum=${page.startPage-page.pageBlock}" aria-label="Previous">
        		 <span aria-hidden="true">&laquo;</span>
       		</a>
    			</li>
    		</c:if>
    		
-   		<c:forEach var="i" begin="${startPage}" end="${endPage}">
+   		<c:forEach var="i" begin="${page.startPage}" end="${page.endPage}">
    			 <li class="page-item">
    			  <a class="page-link" href="board_secondhand.do?mode=all&pageNum=${i}">${i}</a></li>
     	</c:forEach>
     
-   <c:if test="${endPage < pageCount}">
+   <c:if test="${page.endPage < page.pageCount}">
    			 <li class="page-item">
-      			<a class="page-link" href="board_secondhand.do?mode=all&pageNum=${startPage+pageBlock}" aria-label="Next">
+      			<a class="page-link" href="board_secondhand.do?mode=all&pageNum=${page.startPage+page.pageBlock}" aria-label="Next">
         			<span aria-hidden="true">&raquo;</span>
      			</a>
     		</li>

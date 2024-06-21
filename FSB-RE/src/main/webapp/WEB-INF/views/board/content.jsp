@@ -5,7 +5,6 @@
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <script src="resources/js/jquery-3.7.0.js"></script>
-
 <style>
 .box {
     width: 50px;
@@ -23,8 +22,31 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
 </style>
+
+<!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="resources/NiceAdmin/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  
+   <script src="resources/NiceAdmin/assets/vendor/quill/quill.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="resources/NiceAdmin/assets/js/main.js"></script>
+  <!-- Template Main CSS File -->
+  <link href="resources/NiceAdmin/assets/css/style.css" rel="stylesheet">
+
 <script type="text/javascript">
 	function checkDel(board_num, board_img1, board_img2, board_img3, board_img4, filename) {
 		var isDel = window.confirm("정말로 삭제하겠습니까?")
@@ -277,8 +299,13 @@
 		</c:if>
 		<!-- 내용 -->
 		<div class="mb-3 w-50 mx-auto p-2">
-			<textarea class="form-control" id="exampleFormControlTextarea1"
-				name="board_content" rows="15" readonly>${getBoard.board_content}</textarea>
+		 <div class="row">
+		 	<div class="card">
+		 	<div class= "card-body">
+		<pre><c:out value="${getBoard.board_content}" /></pre>
+            </div>
+            </div>
+            </div>
 		</div>
 <!-- 첨부파일 -->		
 		<c:if test="${not empty listFile}">

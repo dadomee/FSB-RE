@@ -2,6 +2,35 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- map.jsp -->
+
+<!-- Vendor JS Files -->
+  <script src="resources/NiceAdmin/assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/echarts/echarts.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/quill/quill.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="resources/NiceAdmin/assets/js/main.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="resources/NiceAdmin/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="resources/NiceAdmin/assets/css/style.css" rel="stylesheet">
 <script>
 	function maplist(){
 		var form = $('#f')[0];
@@ -27,8 +56,7 @@
 
 	}
 </script>
-			<div align="center"><h5><strong>FSB 보드게임 매장지도 검색</strong></h5></div>
-			<div class="border-top"></div>
+s			<div class="border-top"></div>
 			 <form id="f"  name="f" class="d-flex" role="search" action="javascript:maplist()">
 		<div class="input-group mb-3">
 			<input type="search" name="searchString" class="form-control"
@@ -46,7 +74,7 @@
 		<td>
 		<div class="card">
   			<div class="card-body" style=height:170px;>
-   				<a href="map_click.do?bp_num=${list.bp_num }"><h5 class="card-title">${list.bp_store_name }</h5></a>
+   				<div class="card-title"><a href="map_click.do?bp_num=${list.bp_num }">${list.bp_store_name }</a></div>
    				 <p class="card-text">🚩${list.bp_location }${list.bp_d_location }
    				 <br>
   				 📞${list.bp_tel } 		 ⭐${list.bp_starrating }/5.0</p>
@@ -65,7 +93,7 @@
 		<td>
 		<div class="card">
   			<div class="card-body" style=height:165px;>
-   				<a href="map_click.do?bp_num=${plist.bp_num }"><h5 class="card-title">${plist.bp_store_name }</h5></a>
+   				<div class="card-title"><a href="map_click.do?bp_num=${list.bp_num }">${list.bp_store_name }</a></div>
    		 <p class="card-text">🚩${plist.bp_location }${list.bp_d_location }
    				 <br>
   				 📞${plist.bp_tel } 		 ⭐${plist.bp_starrating }/5.0</p>    			 
