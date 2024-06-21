@@ -98,12 +98,11 @@
 		</form>
 	</div>
 	</div>
-	<div class="col-2">
 	<!-- 로그인 했을때만 글쓰기 버튼 노출 -->
-			<c:if test="${not empty sessionScope.mbId}">
-			<td align="right"><a href="write_board.do?mode=${params.mode}"><button type="button" class="btn btn-outline-primary">글쓰기</button></a></td>
-			</c:if>
-	</div>
+		<c:if test="${not empty sessionScope.mbId}">
+	<div class="col-2 align-self-center"><a href="write_board.do?mode=${params.mode}"><button type="button" class="btn btn-outline-primary">글쓰기</button></a>
+		</div>
+		</c:if>
 	</div>
 	</div>
 	<div class="container text-center">

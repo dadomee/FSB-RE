@@ -50,6 +50,7 @@
     <br>
       <h1>익명게시판</h1>
     </div><!-- End Page Title -->
+    
     <section class="section">
       <div class="row">
         <div class="col-lg-10">
@@ -73,12 +74,12 @@
 		</form>
 	</div>
 	</div>
-	<div class="col-2">
 	<!-- 로그인 했을때만 글쓰기 버튼 노출 -->
 		<c:if test="${not empty sessionScope.mbId}">
-			<td align="right"><a href="write_board.do?mode=anony"><button type="button" class="btn btn-outline-success">글쓰기</button></a></td>
-		</c:if>
+	<div class="col-2 align-self-center">
+			<a href="write_board.do?mode=anony"><button type="button" class="btn btn-outline-success">글쓰기</button></a>
 		</div>
+		</c:if>
 	</div>
 	</div>
 	<div class="container text-center">
