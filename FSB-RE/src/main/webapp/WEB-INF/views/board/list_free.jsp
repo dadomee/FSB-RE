@@ -252,7 +252,7 @@
           <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">인기글</h5>
-             <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" ">
+             <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white">
  	<div class="container">
   	<div class="row">
 	<div class="card border-light mb-3" style="max-width: 18rem;">
