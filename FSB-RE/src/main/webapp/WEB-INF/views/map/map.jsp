@@ -3,6 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <meta charset="UTF-8">
 <%@include file="../user/user_top.jsp"%>
+<script src="resources/js/jquery-3.7.0.js"></script>
+<script src="resources/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
 <style>
 .wrap {
 	position: absolute;
@@ -111,18 +113,31 @@
 .info .link {
 	color: #5085BB;
 }
-</style>
-<div class="row row-cols-2">
-	<div class="col vertical-right-line flex-shrink-0 p-3 bg-white"
-		style="width: 20%; height: 500px;">
+</style> 
+	<div class="container-fluid">
+	 <div class="pagetitle">
+    <br>
+      <h1>보드게임 매장지도</h1>
+    </div><!-- End Page Title -->
+	<div class="row">
+	<div class="col-lg-3">
+	       <div class="card h-100">
+       		<div class="card-body">
 		<%@include file="../map/mapListBox.jsp"%>
 	</div>
-
-	<div class="col" style="width: 80%; height: 800px;" align="center">
-
-		<div id="map" style="width: 95%; height: 90%;"></div>
 	</div>
-</div>
+		</div>
+
+	<div class="col-lg-9">
+	<div class="card h-100">
+	<div class="card-body" style="height : 700px;">
+
+		<div id="map" style="width:100%; height: 100%;"></div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=265d925f04bd6bf7c74e0ca951641be9&libraries=services"></script>
 <script>

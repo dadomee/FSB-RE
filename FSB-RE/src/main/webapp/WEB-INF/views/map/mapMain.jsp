@@ -4,15 +4,60 @@
 <%@include file="../user/user_top.jsp" %>
 <!-- map.jsp -->
 <head>
+<script src="resources/js/jquery-3.7.0.js"></script>
+<!-- Vendor JS Files -->
+  <script src="resources/NiceAdmin/assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/echarts/echarts.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="resources/NiceAdmin/assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="resources/NiceAdmin/assets/js/main.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="resources/NiceAdmin/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="resources/NiceAdmin/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="resources/NiceAdmin/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-<div class="row row-cols-2">
-	<div class="col vertical-right-line flex-shrink-0 p-3 bg-white" style="width: 20%; height: 500px;">
-		<%@include file="../map/mapListBox.jsp"%>
+	<div class="container-fluid">
+    <div class="pagetitle">
+    <br>
+      <h1>보드게임 매장지도</h1>
+    </div><!-- End Page Title -->
+ <section class="section">
+      <div class="row">
+      <div class="col-lg-3">
+       <div class="card h-100">
+       		<div class="card-body">
+				<%@include file="../map/mapListBox.jsp"%>
+			</div>
+			</div>
+		</div>
+		
+	<div class="col-lg-9">
+	<div class="card h-100">
+	<div class="card-body" style="height : 700px;">
+	<div align="center" id="map" style="width: 100%; height:100%;"></div>
 	</div>
-	
-	<div class="col" style="width: 80%; height: 800px;" align="center">
-	<div align="center" id="map" style="width: 95%; height: 90%;;"></div>
+	</div>
+	</div>
+	</div>
+	</section>
 	</div>
 	<!-- services 라이브러리 불러오기 -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=265d925f04bd6bf7c74e0ca951641be9&libraries=services"></script>

@@ -9,11 +9,10 @@
   <script src="resources/NiceAdmin/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
   <script src="resources/NiceAdmin/assets/vendor/chart.js/chart.umd.js"></script>
   <script src="resources/NiceAdmin/assets/vendor/echarts/echarts.min.js"></script>
-  <script src="resources/NiceAdmin/assets/vendor/quill/quill.js"></script>
   <script src="resources/NiceAdmin/assets/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="resources/NiceAdmin/assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="resources/NiceAdmin/assets/vendor/php-email-form/validate.js"></script>
-
+	<script src="resources/js/jquery-3.7.0.js"></script>
   <!-- Template Main JS File -->
   <script src="resources/NiceAdmin/assets/js/main.js"></script>
   <!-- Google Fonts -->
@@ -56,7 +55,7 @@
 
 	}
 </script>
-s			<div class="border-top"></div>
+			 <div class="card-header">
 			 <form id="f"  name="f" class="d-flex" role="search" action="javascript:maplist()">
 		<div class="input-group mb-3">
 			<input type="search" name="searchString" class="form-control"
@@ -64,16 +63,16 @@ s			<div class="border-top"></div>
 			<button class="btn btn-outline-secondary" type="submit"	id="button-addon2">검색</button>
 			</div>
 		</form>
-		<div class="border-top"></div>
+			</div>
 		<br>
-		<div class="container overflow-scroll" style=max-height:600px;>
+		<div class="container-fluid overflow-scroll" style=max-height:700px;>
 		<c:if test="${mode eq null }">
 		<table id="maplist">
 		<c:forEach var="list" items="${locationList }">
 		<tr >
 		<td>
 		<div class="card">
-  			<div class="card-body" style=height:170px;>
+  			<div class="card-body">
    				<div class="card-title"><a href="map_click.do?bp_num=${list.bp_num }">${list.bp_store_name }</a></div>
    				 <p class="card-text">🚩${list.bp_location }${list.bp_d_location }
    				 <br>
@@ -92,12 +91,12 @@ s			<div class="border-top"></div>
 		<tr >
 		<td>
 		<div class="card">
-  			<div class="card-body" style=height:165px;>
-   				<div class="card-title"><a href="map_click.do?bp_num=${list.bp_num }">${list.bp_store_name }</a></div>
-   		 <p class="card-text">🚩${plist.bp_location }${list.bp_d_location }
+  			<div class="card-body">
+   				<div class="card-title"><a href="map_click.do?bp_num=${plist.bp_num }">${plist.bp_store_name }</a></div>
+   		 <p class="card-text">🚩${plist.bp_location }${plist.bp_d_location }
    				 <br>
   				 📞${plist.bp_tel } 		 ⭐${plist.bp_starrating }/5.0</p>    			 
-  				 <a href="b_profile.do?bp_num=${plist.bp_num }" class="card-link">프로필로 이동</a>
+  				<a href="b_personalHome.do?bp_num=${plist.bp_num }&num=${plist.mem_num}"  class="card-link">프로필로 이동</a>
  			 </div>
 		</div>
 		</td>
