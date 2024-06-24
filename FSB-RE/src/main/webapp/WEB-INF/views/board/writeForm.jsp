@@ -20,23 +20,13 @@
   <link href="resources/NiceAdmin/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="resources/NiceAdmin/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="resources/NiceAdmin/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="resources/NiceAdmin/assets/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="resources/NiceAdmin/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="resources/NiceAdmin/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="resources/NiceAdmin/assets/vendor/simple-datatables/style.css" rel="stylesheet">
   
-   <script src="resources/NiceAdmin/assets/vendor/quill/quill.js"></script>
-  <script src="resources/NiceAdmin/assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="resources/NiceAdmin/assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="resources/NiceAdmin/assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
   <script src="resources/NiceAdmin/assets/js/main.js"></script>
   <!-- Template Main CSS File -->
   <link href="resources/NiceAdmin/assets/css/style.css" rel="stylesheet">
 
-</body>
-<title>게시글 작성</title>
 <script type="text/javascript">
 
 	function check() {
@@ -141,8 +131,9 @@ function checkFile(file){
   			 </div>
   			 </div>
     		  <div class="row">
-              <!-- TinyMCE Editor -->
-              <textarea class="tinymce-editor" name="board_content" placeholder="내용을 입력하세요." rows="10" ></textarea>
+    		  <div id="editor" class="d-flex ">
+              <textarea id= "board_content" name="board_content" placeholder="내용을 입력하세요." ></textarea>
+              </div>
             </div>
           </div>
         </div>
@@ -197,6 +188,36 @@ function checkFile(file){
 	</section>
 	</div>
 </body>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" />
+	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+<script>
+  const quill = new Quill('#editor', {
+    theme: 'snow'
+ 		 });
+  quill.on('text-change', function(delta, oldDelta, source) {
+	    if ($('#board_content').length > 0) {
+	        $('#board_content').val(quill.container.firstChild.innerHTML);
+	    }else{
+	    	$('#ncontent').val(quill.container.firstChild.innerHTML);	    	
+	    }
+	});
+	quill.getModule('toolbar').addHandler('image', function () {
+    selectLocalImage();
+});
+  var toolbarOptions = [
+	  [{ 'font': [] }],
+	  [{ 'size': ['small', false, 'large', 'huge'] }],  // 글씨 크기
+	  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+	  ['bold', 'underline'],        // 굵게,밑줄
+	  [{ 'align': [] }],
+	  [{ 'list': 'ordered'}, { 'list': 'bullet' }], // 숫자,점 정렬
+	  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+	  ['blockquote', 'code-block'], // 블럭,코드블록 
+	  ['link', 'image']
+	];
+  
+
+</script>
 <%@include file="../user/user_bottom.jsp"%>
 </html>
 

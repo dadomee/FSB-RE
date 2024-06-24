@@ -31,22 +31,15 @@
   <!-- Vendor CSS Files -->
   <link href="resources/NiceAdmin/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="resources/NiceAdmin/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="resources/NiceAdmin/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="resources/NiceAdmin/assets/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="resources/NiceAdmin/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="resources/NiceAdmin/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="resources/NiceAdmin/assets/vendor/simple-datatables/style.css" rel="stylesheet">
-  
-   <script src="resources/NiceAdmin/assets/vendor/quill/quill.js"></script>
-  <script src="resources/NiceAdmin/assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="resources/NiceAdmin/assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="resources/NiceAdmin/assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
   <script src="resources/NiceAdmin/assets/js/main.js"></script>
   <!-- Template Main CSS File -->
   <link href="resources/NiceAdmin/assets/css/style.css" rel="stylesheet">
+</body>
 
+  
 <script type="text/javascript">
 	function checkDel(board_num, board_img1, board_img2, board_img3, board_img4, filename) {
 		var isDel = window.confirm("정말로 삭제하겠습니까?")
@@ -302,7 +295,9 @@
 		 <div class="row">
 		 	<div class="card">
 		 	<div class= "card-body">
-		<pre><c:out value="${getBoard.board_content}" /></pre>
+		 	<div id="editor">
+				<c:out value="${getBoard.board_content}" />
+            </div>
             </div>
             </div>
             </div>
@@ -472,6 +467,17 @@
 		<input type="hidden" name="board_img4" />
 		<input type="hidden" name="filename" />
 	</form>
+	
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.bubble.css" />	
+	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+  	<script>
+      var quill = new Quill('#editor', {
+          readOnly: true,
+          theme: 'bubble'
+      });
+  	</script>
+  
 <%@include file="../user/user_bottom.jsp"%>
 
 
