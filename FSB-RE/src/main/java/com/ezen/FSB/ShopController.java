@@ -3,6 +3,8 @@ package com.ezen.FSB;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StopWatch;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +62,110 @@ public class ShopController {
 	
 	@Autowired
 	private AdminShopMapper adminShopMapper;
+	
+	/*=======================================
+	 * 2024.06.25 진다솜 login check 메소드 추가
+	 * stopwatch 추가+사용
+	 * 
+	 * 	=====================================
+	*/
+	
+	public ModelAndView loginCheck(HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		//회원 정보를 위한 회원번호
+		HttpSession session = req.getSession();
+		MemberDTO dto = (MemberDTO)session.getAttribute("login_mem");
+		int mem_num;
+		if(dto != null){
+			mem_num = dto.getMem_num();
+			mav.addObject("mem_num", mem_num);
+		}
+	          
+		return mav;
+	}
+	//쇼핑몰 메인페이지(전체상품목록 및 상세검색목록)
+	@RequestMapping("/shop_main.do")
+	public ModelAndView mainShop(HttpServletRequest req, @RequestParam Map<String, String> params) {
+		StopWatch speed = new StopWatch();
+		LocalDate date = LocalDate.now();
+		LocalTime time = LocalTime.now();
+		speed.start();
+		ModelAndView mav = new ModelAndView("shop/shop_main");
+		HttpSession session = req.getSession();
+		java.text.DecimalFormat df = new java.text.DecimalFormat("###,###");
+		session.setAttribute("df", df);
+	    
+		List<ThemeDTO> tlist = adminGameMapper.listTheme();
+		mav.addObject("listTheme", tlist);
+		
+		loginCheck(req);
+		
+		//인기 보드게임
+		List<Map<String, Object>> rankOrder = adminShopMapper.rankSales();
+		// 상품 리스트 ( 매출 순위로 담기)
+		List<ShopProductDTO> listProd = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			// map 에 담아온 데이터 하나씩 꺼내기
+			Map map = rankOrder.get(i);
+			String imsi = map.toString().replace("{", "").replace("}", "");
+			System.out.println("map 데이터 : " + imsi);
+			// split
+			String str[] = imsi.trim().split(",");
+			// 판매 수량
+			str[0] = str[0].substring(16);
+			//System.out.println("판매 수량 " + str[0]);
+			int detail_qty = Integer.parseInt(str[0]);
+			// 상품 번호
+			str[1] = str[1].substring(10);
+			//System.out.println("상품 번호 " + str[1]);
+			int prod_num = Integer.parseInt(str[1]);
+
+			// 해당 상품 꺼내서 담기
+			ShopProductDTO dto2 = adminShopMapper.getProd(prod_num);
+			dto2.setDetail_qty(detail_qty); // 총 판매수량으로 세팅
+			listProd.add(dto2);
+		}
+		for(ShopProductDTO dto2 : listProd) {
+			// 리뷰 개수 구하기
+			dto2.setSr_count(adminShopMapper.getProdReviewCount(dto2.getProd_num()));
+			// 좋아요 개수 구하기
+			dto2.setSl_count(shopMyPageMapper.ShopGetLikeCount(dto2.getProd_num()));
+			// 리뷰 별점 평균
+			int count = shopMapper.shopviewReviewCount(dto2.getProd_num());
+			if (count != 0) {
+				dto2.setProd_starratingAvg(shopMapper.reviewAvg(dto2.getProd_num()));
+			}
+		}
+		mav.addObject("listRank", listProd);
+		mav.addObject("count", listProd.size());		
+		//전체 보드게임
+		// 24.06 전체 목록 끌어오던거 20개 끌어오는 것으로 수정 < 속도 개선
+		List<ShopProductDTO> listProd2 = shopMyPageMapper.prodView20();
+		for(ShopProductDTO dto2 : listProd2) {
+			// 리뷰 개수 구하기
+			dto2.setSr_count(adminShopMapper.getProdReviewCount(dto2.getProd_num()));
+			// 좋아요 개수 구하기
+			dto2.setSl_count(shopMyPageMapper.ShopGetLikeCount(dto2.getProd_num()));
+			// 리뷰 별점 평균
+			int count = shopMapper.shopviewReviewCount(dto2.getProd_num());
+			if (count != 0) {
+				dto2.setProd_starratingAvg(shopMapper.reviewAvg(dto2.getProd_num()));
+			}
+		}
+		mav.addObject("listProd", listProd2);
+//		//리뷰 별점 평균
+//		int count = shopMapper.shopviewReviewCount(prod_num);
+//		if(count != 0) {
+//			int reviewAvg = shopMapper.reviewAvg(prod_num);
+//			System.out.println("리뷰별점평균"+reviewAvg);
+//			mav.addObject("reviewAvg", reviewAvg);
+//			mav.addObject("count", count);
+//		}      
+		speed.stop();
+		System.out.println("====현재 날짜/시간 :"+date +"/"+time+"  경과시간 >>"+speed.getTotalTimeSeconds()+"초====");
+		return mav;
+	}
+	
 	
 	// 쇼핑몰 메인페이지 탑(테마별)
 	@RequestMapping("shop_cateFind.do")
@@ -231,97 +338,7 @@ public class ShopController {
 		mav.addObject("listProd", list);
 			
 		return mav;
-			
 	}
-	
-	
-	//쇼핑몰 메인페이지(전체상품목록 및 상세검색목록)
-	@RequestMapping("/shop_main.do")
-	public ModelAndView mainShop(HttpServletRequest req, @RequestParam Map<String, String> params) {
-		ModelAndView mav = new ModelAndView("shop/shop_main");
-
-		HttpSession session = req.getSession();
-		java.text.DecimalFormat df = new java.text.DecimalFormat("###,###");
-		session.setAttribute("df", df);
-	    
-		List<ThemeDTO> tlist = adminGameMapper.listTheme();
-		mav.addObject("listTheme", tlist);
-		
-		//비회원
-		int mem_num = 0;
-	       
-		//회원 정보를 위한 회원번호
-		MemberDTO dto = (MemberDTO)session.getAttribute("login_mem");
-		mav.addObject("mem_num", mem_num);
-	      
-		if(dto != null){
-			mem_num = dto.getMem_num();
-		}
-	          
-		//인기 보드게임
-		List<Map<String, Object>> rankOrder = adminShopMapper.rankSales();
-		// 상품 리스트 ( 매출 순위로 담기)
-		List<ShopProductDTO> listProd = new ArrayList<>();
-		for (int i = 0; i < rankOrder.size(); ++i) {
-			// map 에 담아온 데이터 하나씩 꺼내기
-			Map map = rankOrder.get(i);
-			String imsi = map.toString().replace("{", "").replace("}", "");
-			System.out.println("map 데이터 : " + imsi);
-			// split
-			String str[] = imsi.trim().split(",");
-			// 판매 수량
-			str[0] = str[0].substring(16);
-			System.out.println("판매 수량 " + str[0]);
-			int detail_qty = Integer.parseInt(str[0]);
-			// 상품 번호
-			str[1] = str[1].substring(10);
-			System.out.println("상품 번호 " + str[1]);
-			int prod_num = Integer.parseInt(str[1]);
-
-			// 해당 상품 꺼내서 담기
-			ShopProductDTO dto2 = adminShopMapper.getProd(prod_num);
-			dto2.setDetail_qty(detail_qty); // 총 판매수량으로 세팅
-			listProd.add(dto2);
-		}
-		for(ShopProductDTO dto2 : listProd) {
-			// 리뷰 개수 구하기
-			dto2.setSr_count(adminShopMapper.getProdReviewCount(dto2.getProd_num()));
-			// 좋아요 개수 구하기
-			dto2.setSl_count(shopMyPageMapper.ShopGetLikeCount(dto2.getProd_num()));
-			// 리뷰 별점 평균
-			int count = shopMapper.shopviewReviewCount(dto2.getProd_num());
-			if (count != 0) {
-				dto2.setProd_starratingAvg(shopMapper.reviewAvg(dto2.getProd_num()));
-			}
-		}
-		mav.addObject("listRank", listProd);
-		mav.addObject("count", listProd.size());		
-		
-		//전체 보드게임
-		List<ShopProductDTO> listProd2 = shopMapper.listProd(); 
-		for(ShopProductDTO dto2 : listProd2) {
-			// 리뷰 개수 구하기
-			dto2.setSr_count(adminShopMapper.getProdReviewCount(dto2.getProd_num()));
-			// 좋아요 개수 구하기
-			dto2.setSl_count(shopMyPageMapper.ShopGetLikeCount(dto2.getProd_num()));
-			// 리뷰 별점 평균
-			int count = shopMapper.shopviewReviewCount(dto2.getProd_num());
-			if (count != 0) {
-				dto2.setProd_starratingAvg(shopMapper.reviewAvg(dto2.getProd_num()));
-			}
-		}
-		mav.addObject("listProd", listProd2);
-//		//리뷰 별점 평균
-//		int count = shopMapper.shopviewReviewCount(prod_num);
-//		if(count != 0) {
-//			int reviewAvg = shopMapper.reviewAvg(prod_num);
-//			System.out.println("리뷰별점평균"+reviewAvg);
-//			mav.addObject("reviewAvg", reviewAvg);
-//			mav.addObject("count", count);
-//		}      
-		return mav;
-	}
-
 	//쇼핑몰 인기 보드게임
 	@RequestMapping("/shop_main_best.do")
 	public ModelAndView mainBestProd(HttpServletRequest req, @RequestParam Map<String, String> params) {
