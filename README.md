@@ -48,7 +48,8 @@ FSB(보드게임 복합 커뮤니티 사이트)는 국비학원에서 진행한 
 
 ## ERD (담당 기능 부분)
 
-![FSB_ERD](https://github.com/dadomee/FSB/assets/137809118/9b49a2dd-5f18-4c86-94f1-cea22251eb56)
+![image](https://github.com/dadomee/FSB-RE/assets/137809118/fdb1b37c-d7a6-4da0-aa30-0f62c89146a7)
+
 <br>
 
 ## 담당 기능
@@ -71,17 +72,26 @@ FSB(보드게임 복합 커뮤니티 사이트)는 국비학원에서 진행한 
 <div align="center"><h6>[중고게시판 목록]</h6></div>
 <br>
 
+++24.06 게시판 리스트 UI 변경
+![image](https://github.com/dadomee/FSB-RE/assets/137809118/64e22607-5f60-48d6-b6ea-847efcf5f94c) <br>
+![image](https://github.com/dadomee/FSB-RE/assets/137809118/eb21bc69-d90d-4af6-aef4-8f7fe95ed5e5) <br>
+![image](https://github.com/dadomee/FSB-RE/assets/137809118/064a8918-37f9-4239-99b6-084a3a198622) <br>
+
+
 ![image](https://github.com/dadomee/FSB/assets/137809118/8e5deeaf-894f-4d81-934d-7ed114df67d9)
 <br>
 <div align="center"><h6>[게시글 상세보기]</h6></div>
 <br>
 
-2.비즈니스 매장지도
-  + 기능 : 비즈니스 매장 검색, 카카오 지도 API 활용
+2.비즈니스 보드게임 매장지도
+  + 기능 : 비즈니스 보드게임 매장 검색, 카카오 지도 API 활용
   + 설명 : 사업자 SNS를 연결하여 사이트에 등록된 매장 위치 정보를 알수 있습니다.
           카카오 지도 API를 활용하여 지도 기능을 구현하였습니다.
 
 ![image](https://github.com/dadomee/FSB/assets/137809118/dd3d2618-1b5f-4fe8-9788-acc169f66fc7)
+
+++24.06 지도 UI 변경
+![image](https://github.com/dadomee/FSB-RE/assets/137809118/a58caa0c-76a9-48b7-8717-70a58bd4678f)
 
 3.비즈니스 프로필
   + 기능 : 비즈니스 프로필에 매장정보, 위치 확인과 리뷰 CRUD, 매장 전용 쿠폰 발급, 발행
