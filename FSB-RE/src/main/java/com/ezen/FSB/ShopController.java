@@ -140,7 +140,8 @@ public class ShopController {
 		mav.addObject("count", listProd.size());		
 		//전체 보드게임
 		// 24.06 전체 목록 끌어오던거 20개 끌어오는 것으로 수정 < 속도 개선
-		List<ShopProductDTO> listProd2 = shopMyPageMapper.prodView20();
+		String mode = "main" ;
+		List<ShopProductDTO> listProd2 = shopMapper.listProd(mode);
 		for(ShopProductDTO dto2 : listProd2) {
 			// 리뷰 개수 구하기
 			dto2.setSr_count(adminShopMapper.getProdReviewCount(dto2.getProd_num()));
@@ -263,7 +264,7 @@ public class ShopController {
 		// !!!!!!!!!!!!!!!!!!!!!!!추가
 		// 상품 20개씩 나오게 구현
 		List<ShopProductDTO> list = shopMyPageMapper.prodView20();
-		System.out.println("20개 들고와라" + list);
+		//System.out.println("20개 들고와라" + list);
 		for(ShopProductDTO dto2 : list) {
 			// 리뷰 개수 구하기
 			dto2.setSr_count(adminShopMapper.getProdReviewCount(dto2.getProd_num()));
@@ -1173,10 +1174,12 @@ public class ShopController {
 	@RequestMapping(value="/shop_insertQnA.do", method=RequestMethod.GET)
 	public ModelAndView insertQnA(HttpServletRequest req) {
 		HttpSession session = req.getSession();
-		List<ShopProductDTO> listProd = shopMapper.listProd();
+		String main = "";
+		List<ShopProductDTO> listProd = shopMapper.listProd(main);
 		// 목록 세션 꺼내기/저장
 		if(listProd == null) {
-			listProd = shopMapper.listProd();
+
+			listProd = shopMapper.listProd(main);
 			session.setAttribute("listProd", listProd);
 		}
 		session.setAttribute("listProd", listProd);

@@ -37,9 +37,14 @@ public class ShopMapper {
 		return sqlSession.selectOne("getProd", prod_num);
 	}
 	//전체상품 목록
-	public List<ShopProductDTO> listProd(){
+	public List<ShopProductDTO> listProd(String mode){
+		if(mode.equals("")) {
 		return sqlSession.selectList("listProd");
+		}else {
+		return sqlSession.selectList("listProdMain");
+		}
 	}
+	
 	//전체상품 이름순 정렬
 	public List<ShopProductDTO> sortProd1(String sort){
 		return sqlSession.selectList("sortProd1", sort);

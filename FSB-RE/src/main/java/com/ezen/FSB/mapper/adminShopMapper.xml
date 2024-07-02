@@ -222,10 +222,19 @@
 	</select>
 	
 	<!-- 매출 관리 // order_detail 에서 상위 5개 판매 순위 -->
-	<select id="adminRankSales" resultType="map">
-		select prod_num , SUM(detail_qty) from f_order_detail group by prod_num order by SUM(detail_qty) DESC
+<!--  <select id="adminRankSales" resultType="map">
+		select prod_num , SUM(detail_qty) from f_order_detail group by prod_num order by SUM(detail_qty) DESC 
+	</select> -->
+	<!-- 매출 관리 // order_detail 에서 상위 5개 판매 순위 -->
+<select id="adminRankSales" resultType="map">
+		SELECT *
+	FROM (
+    SELECT prod_num, SUM(detail_qty)
+    FROM f_order_detail
+    GROUP BY prod_num
+    ORDER BY SUM(detail_qty) desc
+	)where rownum <![CDATA[<=]]> 5
 	</select>
-	
 	<!-- 재고 관리 // 재고 오름차순 -->
 	<select id="adminListInventory" resultType="shopProductDTO">
 		select p.*, g.game_name, g.game_img from f_product p left join f_game g on p.game_num = g.game_num order by p.prod_qty asc

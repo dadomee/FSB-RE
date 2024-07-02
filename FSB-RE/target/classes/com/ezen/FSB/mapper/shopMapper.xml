@@ -7,6 +7,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="listProd" resultType="ShopProductDTO">
 		  select p.*, g.game_name, g.game_img from f_product p left join f_game g on p.game_num = g.game_num
 	</select>
+	
+	<select id="listProdMain" resultType="ShopProductDTO">
+	select p.prod_num,
+		p.prod_company,
+		p.prod_discount,
+		p.prod_price,
+		p.prod_discount,
+		g.game_name,
+		g.game_img
+	from f_product p
+	left join f_game g
+	on p.game_num = g.game_num
+	where rownum <![CDATA[<=]]>
+	20
+	</select>
+	
 	<!-- 상품 찾기(이름순/판매순/인기순/최신순) -->
  	<select id="sortProd1" parameterType="String" resultType="ShopProductDTO">
  		select p.*, g.game_name, g.game_img from f_product p left join f_game g on p.game_num = g.game_num order by g.game_name asc
