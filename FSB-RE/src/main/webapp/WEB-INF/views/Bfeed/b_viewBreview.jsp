@@ -8,6 +8,7 @@
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
 <script src="resources/js/bootstrap.bundle.min.js"></script>
 <script src="resources/js/jquery-3.7.0.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <style>
 .vertical-right-line {
 	border-right-style: solid;

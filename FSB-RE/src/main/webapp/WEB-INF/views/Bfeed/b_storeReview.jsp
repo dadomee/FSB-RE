@@ -5,6 +5,7 @@
 <link href="resources/css/bootstrap-grid.rtl.min.css" rel="stylesheet">
 <link href="resources/css/sidebars.css" rel="stylesheet">
 <script src="resources/js/sidebars.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 
 <style>
 	.vertical-right-line {
